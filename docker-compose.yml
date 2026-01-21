@@ -45,6 +45,18 @@ services:
       REDASH_DATABASE_URL: postgres://fitness_user:fitness_password@postgres:5432/fitness
       REDASH_REDIS_URL: redis://redis:6379/0
     command: worker
-    
+
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    container_name: fitness_jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    depends_on:
+      - postgres
+ 
 volumes:
   postgres_data:
