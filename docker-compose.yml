@@ -14,5 +14,12 @@ services:
     ports:
       - "5432:5432"
 
+  generator:
+    build: ./generator
+    container_name: fitness_generator
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:
+  
