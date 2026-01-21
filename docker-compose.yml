@@ -19,7 +19,32 @@ services:
     container_name: fitness_generator
     depends_on:
       - postgres
+  
+  redis:
+    image: redis:7
+    container_name: redash_redis
 
+  redash:
+    image: redash/redash:latest
+    container_name: redash
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      REDASH_DATABASE_URL: postgres://fitness_user:fitness_password@postgres:5432/fitness
+      REDASH_REDIS_URL: redis://redis:6379/0
+    ports:
+      - "5000:5000"
+  
+  redash_worker:
+    image: redash/redash:latest
+    depends_on:
+      - redash
+      - redis
+    environment:
+      REDASH_DATABASE_URL: postgres://fitness_user:fitness_password@postgres:5432/fitness
+      REDASH_REDIS_URL: redis://redis:6379/0
+    command: worker
+    
 volumes:
   postgres_data:
-  
